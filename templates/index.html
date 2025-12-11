@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+
+{% block title %}To‑Do — Home{% endblock %}
+
+
+{% block content %}
+<section class="card">
+<header class="card-head">
+<h1 class="title">Your Tasks</h1>
+<p class="subtitle">Add tasks, mark complete, or delete — no JS required.</p>
+</header>
+
+
+<form class="add-form" method="POST" action="{{ url_for('index') }}">
+<input name="title" type="text" placeholder="Add a new task (press Enter or click Add)" autocomplete="off" required>
+<button class="btn primary" type="submit">Add</button>
+</form>
+
+
+{% if tasks %}
+<ul class="todo-list">
+{% for task in tasks %}
+<li class="todo-item {% if task.completed %}done{% endif %}">
+<div class="todo-left">
+<form method="POST" action="{{ url_for('toggle', task_id=task.id) }}">
+<button class="btn icon" type="submit" title="Toggle complete" aria-label="Toggle">
+{% if task.completed %}
+✓
+{% else %}
+○
+{% endif %}
+</button>
+</form>
+<div class="todo-title">{{ task.title }}</div>
+</div>
+
+
+<div class="todo-actions">
+<form method="POST" action="{{ url_for('delete', task_id=task.id) }}" onsubmit="return confirm('Delete this task?');">
+<button class="btn danger" type="submit">Delete</button>
+</form>
+</div>
+</li>
+{% endfor %}
+</ul>
+{% else %}
+<p class="empty">You have no tasks yet — add one above!</p>
+{% endif %}
+</section>
+{% endblock %}

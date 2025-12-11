@@ -1,0 +1,52 @@
+:root{
+--bg1: #0f172a; /* deep navy */
+--bg2: #0b1020; /* darker */
+--card: rgba(255,255,255,0.03);
+--glass: rgba(255,255,255,0.04);
+--accent: #7c5cff;
+--muted: rgba(255,255,255,0.7);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+margin:0;
+font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+background: linear-gradient(180deg,var(--bg1),var(--bg2));
+color: #e6eef8;
+-webkit-font-smoothing:antialiased;
+}
+.nav{padding:18px 0}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.brand{font-weight:700;color:var(--accent);text-decoration:none;font-size:18px}
+.small-info{font-size:13px;opacity:0.8}
+.page{padding:28px 12px 80px}
+.container{max-width:960px;margin:0 auto}
+.card{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; padding:22px; box-shadow: 0 6px 30px rgba(2,6,23,0.6);}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.title{margin:0;font-size:22px}
+.subtitle{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.add-form{display:flex;gap:10px;margin-top:16px}
+.add-form input{flex:1;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:15px}
+.btn{border:0;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+.btn.primary{background:linear-gradient(90deg,var(--accent),#5ad1ff);color:#071124}
+.btn.danger{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#ff6b6b}
+.btn.icon{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:6px 10px;border-radius:8px;font-weight:700}
+.todo-list{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.todo-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.02)}
+.todo-left{display:flex;align-items:center;gap:12px}
+.todo-title{font-size:15px}
+.todo-item.done .todo-title{opacity:0.7;text-decoration:line-through}
+.todo-actions{display:flex;gap:8px}
+.empty{margin:18px 0;color:var(--muted)}
+.footer{position:fixed;left:0;right:0;bottom:10px;text-align:center;font-size:13px;opacity:0.85}
+
+
+/* Responsive */
+@media (max-width:640px){
+.card{padding:16px}
+.title{font-size:18px}
+.add-form{flex-direction:column}
+.add-form input{width:100%}
+.btn{width:100%}
+.todo-actions{flex-direction:row}
+}

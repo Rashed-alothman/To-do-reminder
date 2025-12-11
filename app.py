@@ -2,9 +2,11 @@
 # Date: 10/12/2025--dd/mm/yyyy. 
 # Auther: Rashed Alothman.
 # I just want to say to myself i wish you the best.
-from flask import Flask ,request
+from flask import Flask ,request,render_template
 app = Flask(__name__)
-
+@app.route("/")
+def wheretogo():
+    return 0
 @app.route("/home")
 def helloWorld():
     return "<p> Hello World How the fuck are you!</p>"
@@ -30,3 +32,15 @@ def addUsers(email):
 @app.route("home/User/about me")
 def aboutMe():
     return 0
+@app.route("/login")
+def login():
+    error = None
+    if request.method == 'POST':
+        if valid_login(request.form['username'],
+                       request.form['password']):
+            return log_the_user_in(request.form['username'])
+        else:
+            error = 'Invalid username/password'
+    # the code below is executed if the request method
+    # was GET or the credentials were invalid
+    return render_template('login.html', error=error)
