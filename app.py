@@ -19,25 +19,36 @@ def wheretogo():
 def helloWorld():
     return "<p> Hello World How the fuck are you!</p>"
 
-@app.route("home/tasks/add_Tasks",methods = ["POST"])
+@app.route("/tasks", methods=["GET"])
+def get_tasks():
+    return {'tasks': tasks}
+
+@app.route("/home/tasks/add_Tasks",methods=["POST"])
 def AddTasks():
     data = request.get_json()
-    descripton = data.get("description")
+    description = data.get("description")
     task ={
         "id":len(tasks)+1,
-        "descripton":descripton
+        "description":description
     }
-    task.append(task)
-    return {"massage":"task addad","task":task},201
+    tasks.append(task)
+    return {"message":"task addad","task":task},201
 
-@app.route("home/task/delete_task")
-def deleteTask(ID):
-    return 0
+@app.route("/home/task/delete_task",methods=["POST"])
+def deleteTask():
+    data=request.get_json()
+    task_id=data.get("id")
+    for task in tasks:
+        if task["id"] ==task_id:
+            tasks.remove(task)
+            break
 
-@app.route("home/AddUsersToAccout")
+    return {"message": "Task deleted"}, 200
+
+@app.route("/home/AddUsersToAccout")
 def addUsers(email):
     return 0
-@app.route("home/User/about me")
+@app.route("/home/User/about me")
 def aboutMe():
     return 0
 @app.route("/login")

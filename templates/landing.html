@@ -1,25 +1,35 @@
 {% extends 'base.html' %}
 
-
-{% block title %}Welcome — Diagnostic{% endblock %}
-
+{% block title %}Welcome{% endblock %}
 
 {% block content %}
-<section class="card">
-<h1 class="title">Welcome</h1>
-<p class="subtitle">This is the landing / diagnostic page. If something went wrong, you can navigate to other pages from here.</p>
+<section class="card" style="text-align: center; padding: 60px 20px;">
+  
+  <div style="margin-bottom: 24px;">
+    <svg width="64" height="64" fill="none" stroke="#6366f1" stroke-width="1.5" viewBox="0 0 24 24" style="filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.4));"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+  </div>
 
+  <h1 class="title" style="font-size: 2.5rem; margin-bottom: 12px;">Task Master</h1>
+  <p class="subtitle" style="font-size: 1.1rem; max-width: 400px; margin: 0 auto 32px;">
+    The minimalist, distraction-free way to manage your daily tasks. Built with Python & Flask.
+  </p>
 
-<div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
-<a class="btn primary" href="{{ url_for('home') }}">Go to Home</a>
-<a class="btn" href="{{ url_for('login') }}">Login</a>
-<a class="btn" href="{{ url_for('about_me') }}">About</a>
-<a class="btn" href="{{ url_for('add_users') }}">Add Users</a>
-</div>
+  <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+    <a class="btn primary" href="{{ url_for('login') }}">
+      Get Started
+    </a>
+    <a class="btn ghost" href="{{ url_for('home') }}">
+      View Dashboard
+    </a>
+  </div>
 
+  <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+    <p style="font-size: 0.85rem; color: var(--text-muted);">
+      <span style="display:inline-block; margin: 0 10px;">• Python Backend</span>
+      <span style="display:inline-block; margin: 0 10px;">• No JavaScript</span>
+      <span style="display:inline-block; margin: 0 10px;">• CSS Variables</span>
+    </p>
+  </div>
 
-<div style="margin-top:18px;color:var(--muted)">
-<p>If you see any errors when loading the app, check the terminal running Flask for stack traces. This page intentionally stays minimal so it can be used for quick diagnostics.</p>
-</div>
 </section>
 {% endblock %}

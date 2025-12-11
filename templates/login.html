@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
 
-
-{% block title %}Login{% endblock %}
-
+{% block title %}Sign In{% endblock %}
 
 {% block content %}
-<section class="card">
-<h1 class="title">Sign in</h1>
-<p class="subtitle">Log in to access your account (demo form — no backend verification).</p>
+<section class="card" style="max-width: 400px; margin: 0 auto;">
+  <header class="card-head">
+    <h1 class="title">Welcome Back</h1>
+    <p class="subtitle">Please enter your details to sign in.</p>
+  </header>
 
+  <form method="POST" action="{{ url_for('login') }}" class="form-group">
+    <div>
+        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display:block;">USERNAME</label>
+        <input name="username" type="text" placeholder="e.g. Rashed" required>
+    </div>
+    
+    <div>
+        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display:block;">PASSWORD</label>
+        <input name="password" type="password" placeholder="••••••••" required>
+    </div>
 
-<form method="POST" action="{{ url_for('login') }}" style="margin-top:16px;display:flex;flex-direction:column;gap:10px;max-width:420px;">
-<input name="username" type="text" placeholder="Username" required>
-<input name="password" type="password" placeholder="Password" required>
-<div style="display:flex;gap:10px;">
-<button class="btn primary" type="submit">Sign in</button>
-<a class="btn" href="{{ url_for('landing') }}">Back</a>
-</div>
-</form>
-
-
-<p class="empty" style="margin-top:12px">Note: For production use, integrate Flask-Login or another auth system.</p>
+    <button class="btn primary" type="submit" style="margin-top: 10px;">Sign In</button>
+    <a href="{{ url_for('landing') }}" class="btn ghost">Back</a>
+  </form>
 </section>
 {% endblock %}

@@ -3,27 +3,45 @@
 {% block title %}Add Users{% endblock %}
 
 {% block content %}
-  <section class="card">
-    <h1 class="title">Add Users to Account</h1>
-    <p class="subtitle">Create or invite users (placeholder form).</p>
+<section class="card" style="max-width: 500px; margin: 0 auto;">
+  <header class="card-head">
+    <h1 class="title">Invite Team</h1>
+    <p class="subtitle">Add a new member to your task board.</p>
+  </header>
 
-    <form method="POST" action="{{ url_for('add_users') }}" style="margin-top:16px;display:flex;flex-direction:column;gap:10px;max-width:520px;">
-      <input name="fullname" type="text" placeholder="Full name" required>
-      <input name="email" type="email" placeholder="Email address" required>
-      <select name="role" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;">
-        <option value="member">Member</option>
-        <option value="admin">Admin</option>
-      </select>
-
-      <div style="display:flex;gap:10px;">
-        <button class="btn primary" type="submit">Add user</button>
-        <a class="btn" href="{{ url_for('home') }}">Back to Home</a>
-      </div>
-    </form>
-
-    <div style="margin-top:14px;">
-      <h3 style="margin:8px 0 6px">Invitations</h3>
-      <p class="empty">This page currently does not send real emails — implement server-side logic to persist users and send invites.</p>
+  <form method="POST" action="{{ url_for('add_users') }}" class="form-group">
+    
+    <div>
+      <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display:block;">FULL NAME</label>
+      <input name="fullname" type="text" placeholder="John Doe" required>
     </div>
-  </section>
+
+    <div>
+      <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display:block;">EMAIL ADDRESS</label>
+      <input name="email" type="email" placeholder="john@example.com" required>
+    </div>
+
+    <div>
+      <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display:block;">ACCESS LEVEL</label>
+      <select name="role" style="background-color: #1e293b;"> <option value="member">Team Member</option>
+        <option value="admin">Administrator</option>
+        <option value="viewer">Viewer (Read Only)</option>
+      </select>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; gap: 12px;">
+      <button class="btn primary" type="submit" style="flex: 1;">Send Invitation</button>
+      <a class="btn danger" href="{{ url_for('home') }}">Cancel</a>
+    </div>
+
+  </form>
+
+  <div style="margin-top: 24px; padding: 16px; background: rgba(99, 102, 241, 0.1); border-radius: 8px; border: 1px solid rgba(99, 102, 241, 0.2);">
+    <h3 style="margin: 0 0 8px; font-size: 0.9rem; color: #a5b4fc;">Dev Note</h3>
+    <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">
+      This form POSTs data to your Flask backend. Check your terminal output to see the printed user details when you click "Send".
+    </p>
+  </div>
+
+</section>
 {% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<section class="card">
+  <h1 class="title">About the Developer</h1>
+  <p class="subtitle">Building skills in Full Stack Python.</p>
+  
+  <div style="margin-top: 24px; line-height: 1.6; color: var(--text-muted);">
+    <p>
+      This application is a practice project to master <strong>Flask (Backend)</strong> and <strong>Jinja2 (Templating)</strong>.
+      The goal is to understand how data flows from a Python server to the HTML client without relying on complex JavaScript frameworks.
+    </p>
+    <p>
+      <strong>Current Features:</strong>
+    </p>
+    <ul style="list-style: disc; margin-left: 20px;">
+      <li>Dynamic Routing</li>
+      <li>Form Handling (POST/GET)</li>
+      <li>Template Inheritance</li>
+      <li>Modern CSS (Glassmorphism)</li>
+    </ul>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <a class="btn primary" href="{{ url_for('home') }}">Back to Dashboard</a>
+  </div>
+</section>
+{% endblock %}
