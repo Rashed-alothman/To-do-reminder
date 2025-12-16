@@ -3,13 +3,15 @@
 
 # --- ROUTE STRUCTURE YOU PROVIDED ---
 # '/' → landing/diagnostic page
-# '/home' → main dashboard
-# '/home/tasks/add_tasks' → add a task
-# '/home/task/delete_task' → delete a task
-# '/home/AddUsersToAccount' → placeholder
-# '/home/User/about' → about‑me page
+# '/homepage' → main dashboard
+# '/homepage/tasks/add_tasks' → add a task
+# '/homepage/task/delete_task' → delete a task
+# '/homepage/AddUsersToAccount' → placeholder
+# '/homepage/User/about' → about‑me page
 # '/login' → login page
+from datetime import datetime 
 from flask import Flask, request, render_template, redirect, url_for
+import uuid
 tasks = []
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -17,40 +19,43 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 def landing():
     return render_template('landing.html')
 
-@app.route('/home') 
-def home():
+@app.route('/homepage') 
+def homepage():
     return render_template('homepage.html', tasks=tasks)
 
 @app.route('/homepage/tasks', methods=['GET'])
 def get_tasks():
-    return {'tasks': tasks}
+    return {'Tasks': tasks}
 
 @app.route('/homepage/tasks/add_Tasks',methods=['POST'])
-def add_task():
-    # 'title' matches the input name="title" in homepage.html
+def add_task_html():
     title = request.form.get('title') 
     
     if title:
         new_task = {
-            'id': len(tasks) + 1,
+            'id': str(uuid.uuid4())[:8],
             'title': title
         }
         tasks.append(new_task)
     
-    # Reload the homepage to show the new task
     return redirect(url_for('home'))
 
-def addtasks():
+@app.route('/homepage/api/tasks/add_Tasks',methods=['POST'])
+def add_task_api():
     data = request.get_json()
+    if not data or 'description' not in data:
+        return {'error': 'Invalid or missing data'}, 400
     description = data.get('description')
     task ={
-        'id':len(tasks)+1,
-        'description':description
+        'id':str(uuid.uuid4())[:8],
+        'description':description,
+        'Due date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'completed':False
     }
     tasks.append(task)
-    return {'message':'task addad','task':task},201
+    return {'message':'task added','task':task},201
 
-@app.route('/homepage/tasks/delete_task',methods=['DELETE'])
+@app.route('/homepage/api/tasks/delete_task',methods=['DELETE'])
 def deleteTask():
     data=request.get_json()
     if not data:
@@ -70,12 +75,46 @@ def deleteTask():
     else:
         return ({'message': 'Task not found, no found'}), 404
 
+@app.route('/homepage/api/tasks/updatedtask',methods=["PATCH"])
+def updatdTask():
+    data=request.get_json()
+    
+    task_id=data.get('id')
+    
+    taskhavebeenupdated=False
+    
+    Newdescription = data.get('description')
+    
+    completed=data.get('completed')
+    
+    found_task = None
+    if not data:
+        return {'error': 'Invalid or missing data'}, 400
+    if not task_id:
+        return ({'error': 'Task ID is requried'}), 400
+    else:
+        for task in tasks:
+            if task['id']==task_id:
+                if Newdescription is not None:
+                    task['description'] = Newdescription
+                if completed is not None:
+                    task['completed'] = completed
+                found_task = task
+                taskhavebeenupdated=True
+                break
+        if taskhavebeenupdated:
+            return {'message': 'The Task have been updated', 'task': found_task}, 200
+        else:
+            return({'message ':'The Task fail to update'}),404 
+
 @app.route('/homepage/AddUsersToAccout')
 def addUsers(email):
     return 0
+
 @app.route('/homepage/User/about me')
 def aboutMe():
     return 0
+
 
 @app.route('/about')
 def about():
