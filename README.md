@@ -1,4 +1,4 @@
-![CI Status](https://github.com/YOUR_USERNAME/TMS/workflows/TMS%20CI%20Pipeline/badge.svg)
+![CI Status](https://github.com/Rashed-Alothman/TMS/workflows/TMS%20CI%20Pipeline/badge.svg)
 
 # TMS - Task Management System
 
