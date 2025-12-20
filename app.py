@@ -1,4 +1,4 @@
-# Date: 19/12/2025--dd/mm/yyyy. 
+# Date: 20/12/2025--dd/mm/yyyy. 
 # Auther: Rashed Alothman.
 
 # Description: This is a simple Task Management System (TMS) web application built using Flask and SQLAlchemy.
@@ -20,6 +20,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
+from uuid import uuid4
+from typing import Optional
 import uuid
 
 tasks = []
@@ -32,6 +34,30 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
 
+# Define the base model
+class Task(db.Model):
+    __tablename__ = 'tasks'
+    id: Mapped[str] = mapped_column(String(8), primary_key=True, default=lambda: str(uuid4())[:8])
+    description: Mapped[str] = mapped_column(String(255), nullable=False)
+    due_date: Mapped[Optional[datetime]] = mapped_column(db.DateTime, nullable=True)
+    completed: Mapped[bool] = mapped_column(db.Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(db.DateTime, default=datetime.utcnow)
+    
+    # Representation method for debugging
+    def __repr__(self) -> str:
+        due_date_str = self.due_date.strftime('%Y-%m-%d %H:%M:%S') if self.due_date else 'None'
+        return f"Task(id={self.id}, description={self.description}, due_date={due_date_str}, completed={self.completed})"
+    
+    # Convert to dictionary
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'description': self.description,
+            'due_date': self.due_date.strftime('%Y-%m-%d %H:%M:%S') if self.due_date else None,
+            'completed': self.completed,
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+    
 @app.route('/')
 def landing():
     return render_template('landing.html')
@@ -138,22 +164,9 @@ def add_users(email):
 def about_me():
     return 0
 
-
 @app.route('/about')
 def about():
     return render_template('about.html')
-
-@app.route('/homepage/login')
-def login():
-    error = None
-    if request.method == 'POST':
-        if valid_login(request.form['username'],
-                       request.form['password']):
-            return log_the_user_in(request.form['username'])
-        else:
-            error = 'Invalid username/password'
-    return render_template('login.html', error=error)
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
