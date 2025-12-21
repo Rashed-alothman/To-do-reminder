@@ -13,12 +13,11 @@
 # '/homepage/User/about' → about‑me page
 # '/login' → login page
 
-
+import logging
 from datetime import datetime 
 from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import Integer, String
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.exc import SQLAlchemyError
 from uuid import uuid4
@@ -34,6 +33,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tms.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Define the base model
 class Task(db.Model):
@@ -60,11 +63,23 @@ class Task(db.Model):
 
 @app.route('/')
 def landing():
+    """Landing page."""
     return render_template('landing.html')
+
+@app.route('/homepage')
+def homepage():
+    """Dashboard - displays all tasks."""
+    return render_template('homepage.html')
     
-@app.route('/homepage/task/delete',methods=['POST'])
-def delete_task_html():
-    return redirect(url_for('homepage'))
+@app.route('/login')
+def login():
+    """Login page."""
+    return render_template('login.html')
+
+@app.route('/about')
+def about():
+    """About page."""
+    return render_template('about.html')
 
 @app.route('/homepage/api/tasks', methods=['GET'])
 def get_tasks():
@@ -91,30 +106,36 @@ def add_task_api():
 
 @app.route('/homepage/api/tasks/delete_task',methods=['DELETE'])
 def delete_task():
-    data = request.get_json()
-    
-    if not data:
-        return jsonify({'error': answer_for_data_not_found}), 400
-
-    task_id = data.get('id')
-    
-    if not task_id:
-        return jsonify({'error': 'Task ID is required'}), 400
-
-    task = Task.query.filter_by(id=task_id).first()
-    
-    if not task:
-        return jsonify({'message': 'Task not found'}), 404
     try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'error': answer_for_data_not_found}), 400
+
+        task_id = data.get('id')
+        
+        if not task_id:
+            return jsonify({'error': 'Task ID is required'}), 400
+
+        task = Task.query.filter_by(id=task_id).first()
+        
+        if not task:
+            return jsonify({'message': 'Task not found'}), 404
+        
         db.session.delete(task)
         db.session.commit()
+        logger.info(f"Task deleted: {task_id}")
         return jsonify({'message': 'Task deleted successfully'}), 200
 
     except SQLAlchemyError as e:
         db.session.rollback()
-        print(e)
+        logger.error(f"Database error while deleting task: {str(e)}")
         return jsonify({'error': 'Database error occurred'}), 500
-    
+    except Exception as e:
+        logger.error(f"Unexpected error while deleting task: {str(e)}")
+        return jsonify({'error': 'An unexpected error occurred'}), 500
+
+
 @app.route('/homepage/api/tasks/updated_task',methods=["PATCH"])
 def updated_task():
     
@@ -142,18 +163,6 @@ def updated_task():
     db.session.commit()
 
     return jsonify({'message': 'The Task has been updated', 'task':  task.to_dict()}), 200
-
-@app.route('/homepage/AddUsersToAccout')
-def add_users(email):
-    return 0
-
-@app.route('/homepage/User/about me')
-def about_me():
-    return 0
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
 
 with app.app_context():
     db.create_all()

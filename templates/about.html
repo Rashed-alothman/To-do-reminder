@@ -1,30 +1,92 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}About - Task Master{% endblock %}
 
 {% block content %}
-<section class="card">
-  <h1 class="title">About the Developer</h1>
-  <p class="subtitle">Building skills in Full Stack Python.</p>
-  
-  <div style="margin-top: 24px; line-height: 1.6; color: var(--text-muted);">
-    <p>
-      This application is a practice project to master <strong>Flask (Backend)</strong> and <strong>Jinja2 (Templating)</strong>.
-      The goal is to understand how data flows from a Python server to the HTML client without relying on complex JavaScript frameworks.
-    </p>
-    <p>
-      <strong>Current Features:</strong>
-    </p>
-    <ul style="list-style: disc; margin-left: 20px;">
-      <li>Dynamic Routing</li>
-      <li>Form Handling (POST/GET)</li>
-      <li>Template Inheritance</li>
-      <li>Modern CSS (Glassmorphism)</li>
-    </ul>
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">About Task Master</h1>
+    <p class="card-subtitle">A modern task management system</p>
   </div>
 
-  <div style="margin-top: 30px;">
-    <a class="btn primary" href="{{ url_for('homepage') }}">Back to Dashboard</a>
+  <div style="margin-bottom: 24px;">
+    <h2 style="font-size: 1.2rem; color: var(--text-main); margin: 0 0 12px 0;">What is Task Master?</h2>
+    <p style="color: var(--text-muted); line-height: 1.8; margin: 0;">
+      Task Master is a minimalist task management system built with Python Flask and modern web technologies. 
+      It's designed to help you stay focused on what matters by providing a simple, distraction-free interface 
+      for managing your daily tasks.
+    </p>
   </div>
-</section>
+
+  <div style="margin-bottom: 24px;">
+    <h2 style="font-size: 1.2rem; color: var(--text-main); margin: 0 0 12px 0;">Key Features</h2>
+    <div style="display: grid; gap: 12px;">
+      <div style="display: flex; gap: 12px;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="flex-shrink: 0; color: var(--success); margin-top: 2px;">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <h3 style="margin: 0; font-size: 0.95rem; color: var(--text-main);">Add & Manage Tasks</h3>
+          <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: var(--text-muted);">Quickly add tasks and manage them with ease</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="flex-shrink: 0; color: var(--primary); margin-top: 2px;">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <h3 style="margin: 0; font-size: 0.95rem; color: var(--text-main);">Track Progress</h3>
+          <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: var(--text-muted);">Monitor completed and pending tasks at a glance</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="flex-shrink: 0; color: var(--warning); margin-top: 2px;">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+        <div>
+          <h3 style="margin: 0; font-size: 0.95rem; color: var(--text-main);">REST API</h3>
+          <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: var(--text-muted);">Powerful API for third-party integrations</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 24px;">
+    <h2 style="font-size: 1.2rem; color: var(--text-main); margin: 0 0 12px 0;">Technology Stack</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
+      <div style="padding: 12px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: var(--radius); text-align: center;">
+        <p style="margin: 0; font-weight: 600; color: var(--primary);">Flask</p>
+        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Backend Framework</p>
+      </div>
+      <div style="padding: 12px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius); text-align: center;">
+        <p style="margin: 0; font-weight: 600; color: var(--success);">SQLAlchemy</p>
+        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Database ORM</p>
+      </div>
+      <div style="padding: 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: var(--radius); text-align: center;">
+        <p style="margin: 0; font-weight: 600; color: var(--warning);">Modern CSS</p>
+        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Responsive Design</p>
+      </div>
+      <div style="padding: 12px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: var(--radius); text-align: center;">
+        <p style="margin: 0; font-weight: 600; color: var(--primary);">JavaScript</p>
+        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Vanilla JS</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 16px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: var(--radius); margin-bottom: 24px;">
+    <h3 style="margin: 0 0 8px 0; color: var(--text-main);">Version Info</h3>
+    <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">
+      <strong>Task Master v1.0</strong> • Built by Rashed Alothman • © 2025
+    </p>
+  </div>
+
+  <div style="text-align: center;">
+    <a class="btn primary" href="{{ url_for('homepage') }}">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+      </svg>
+      Start Managing Tasks
+    </a>
+  </div>
+</div>
 {% endblock %}

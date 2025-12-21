@@ -1,27 +1,32 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign In{% endblock %}
+{% block title %}Login - Task Master{% endblock %}
 
 {% block content %}
-<section class="card" style="max-width: 400px; margin: 0 auto;">
-  <header class="card-head">
-    <h1 class="title">Welcome Back</h1>
-    <p class="subtitle">Please enter your details to sign in.</p>
-  </header>
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">Welcome Back</h1>
+    <p class="card-subtitle">Sign in to manage your tasks</p>
+  </div>
 
-  <form method="POST" action="{{ url_for('login') }}" class="form-group">
-    <div>
-        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display:block;">USERNAME</label>
-        <input name="username" type="text" placeholder="e.g. Rashed" required>
-    </div>
-    
-    <div>
-        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display:block;">PASSWORD</label>
-        <input name="password" type="password" placeholder="••••••••" required>
+  <form method="POST" class="form-group">
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input type="text" name="username" placeholder="Enter your username" required autofocus>
     </div>
 
-    <button class="btn primary" type="submit" style="margin-top: 10px;">Sign In</button>
-    <a href="{{ url_for('landing') }}" class="btn ghost">Back</a>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" name="password" placeholder="Enter your password" required>
+    </div>
+
+    <button type="submit" class="btn primary" style="width: 100%; margin-top: 8px;">
+      Sign In
+    </button>
   </form>
-</section>
+
+  <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 24px;">
+    Don't have an account? <a href="{{ url_for('landing') }}" style="color: var(--primary); text-decoration: none;">Go back home</a>
+  </p>
+</div>
 {% endblock %}
