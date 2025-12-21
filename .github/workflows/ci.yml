@@ -70,7 +70,7 @@ jobs:
     - name: Check Flask server health
       run: |
         for i in {1..5}; do
-          if curl -f http://localhost:5000/ 2>/dev/null; then
+          if curl -f http://localhost:5000/homepage/api/tasks 2>/dev/null; then
             echo "✓ Server is healthy"
             exit 0
           fi
