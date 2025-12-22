@@ -26,6 +26,8 @@ import os
 
 
 answer_for_data_not_found = 'Invalid or missing data'
+error_massage_for_try_except_Exception_in_jsonify_fromat='An unexpected error occurred'
+error_massage_for_database = 'Database error occurred'
 # Initialize Flask app
 app = Flask(__name__, template_folder='templates', static_folder='static')
 # Database configuration
@@ -46,7 +48,9 @@ class Task(db.Model):
     description: Mapped[str] = mapped_column(String(255), nullable=False)
     due_date: Mapped[Optional[datetime]] = mapped_column(db.DateTime, nullable=True)
     completed: Mapped[bool] = mapped_column(db.Boolean, default=False)
+    priority: Mapped[str] = mapped_column(String(10),default="low")
     created_at: Mapped[datetime] = mapped_column(db.DateTime, default=datetime.utcnow)
+
     
     # Representation method for debugging
     def __repr__(self) -> str:
@@ -60,6 +64,7 @@ class Task(db.Model):
             'description': self.description,
             'Due Date': self.due_date.strftime('%Y-%m-%d %H:%M:%S') if self.due_date else None,
             'completed': self.completed,
+            'priority': self.priority,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S')}
 
 @app.route('/')
@@ -84,26 +89,72 @@ def about():
 
 @app.route('/homepage/api/tasks', methods=['GET'])
 def get_tasks():
-    all_tasks = Task.query.all()
-    return jsonify({'Tasks': [task.to_dict() for task in all_tasks]})
+    try:
+        completed_param = request.args.get('completed')
+
+        priority_param = request.args.get('priority')
+
+        sort_by =   request.args.get('sort','created_at')
+
+        query = Task.query
+
+        if completed_param is not None:
+            completed_bool = completed_param.lower() == 'true'
+            query = query.filter_by(completed=completed_bool)
+
+
+        if priority_param :
+            query = query.filter_by(priority=priority_param)
+
+        if sort_by == 'created_at':
+            query = query.order_by(Task.created_at.desc())
+        elif sort_by == 'due_date':
+            query = query.order_by(Task.due_date.asc().nullslast())
+        elif sort_by == 'priority':
+            priority_order = ['urgent', 'high', 'medium', 'low']
+            query = query.order_by(db.case({p: i for i, p in enumerate(priority_order)}, value=Task.priority))
+
+        tasks = query.all()
+        return jsonify({'Tasks': [task.to_dict() for task in tasks]})
+    except SQLAlchemyError as e:
+        logger.error(f"Database error while Looking and sorting the tasks: {str(e)}")
+        return jsonify({'error': error_massage_for_database}), 500
+    except Exception as e:
+        logger.error(f'there was error in showing Tasks: {str(e)}')
+        return jsonify({'error': error_massage_for_try_except_Exception_in_jsonify_fromat}), 500
 
 @app.route('/homepage/api/tasks/add_Tasks',methods=['POST'])
 def add_task_api():
-    
-    data = request.get_json()
-    
-    if not data or 'description' not in data:
-        return jsonify({'error': answer_for_data_not_found}), 400
-    
-    description = data.get('description')
-    
-    new_task = Task(
-        description = description,
-        due_date = datetime.now()
-        )
-    db.session.add(new_task)
-    db.session.commit()
-    return jsonify({'message':'task added','task':new_task.to_dict()}),201
+    try:
+        data = request.get_json()
+
+        if not data or 'description' not in data:
+            return jsonify({'error': answer_for_data_not_found}), 400
+
+        description = data.get('description')
+        
+        priority = data.get('priority', 'low').lower()
+        
+        valid_priorities = ['low', 'medium', 'high', 'urgent']
+  
+        if priority not in valid_priorities:
+            return jsonify({'error': f'Priority must be one of: {valid_priorities}'}), 400
+        
+        new_task = Task(
+            description = description,
+            due_date = datetime.now(),
+            priority = priority
+            )
+        db.session.add(new_task)
+        db.session.commit()
+        return jsonify({'message':'task added','task':new_task.to_dict()}),201
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logger.error(f"Database error while adding task: {str(e)}")
+        return jsonify({'error': error_massage_for_database}), 500
+    except Exception as e:
+        logger.error(f"Unexpected error while adding task: {str(e)}")
+        return jsonify({'error': error_massage_for_try_except_Exception_in_jsonify_fromat}), 500
 
 @app.route('/homepage/api/tasks/delete_task',methods=['DELETE'])
 def delete_task():
@@ -131,10 +182,10 @@ def delete_task():
     except SQLAlchemyError as e:
         db.session.rollback()
         logger.error(f"Database error while deleting task: {str(e)}")
-        return jsonify({'error': 'Database error occurred'}), 500
+        return jsonify({'error': error_massage_for_database}), 500
     except Exception as e:
         logger.error(f"Unexpected error while deleting task: {str(e)}")
-        return jsonify({'error': 'An unexpected error occurred'}), 500
+        return jsonify({'error': error_massage_for_try_except_Exception_in_jsonify_fromat}), 500
 
 
 @app.route('/homepage/api/tasks/updated_task',methods=["PATCH"])
