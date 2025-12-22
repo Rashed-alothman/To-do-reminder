@@ -86,7 +86,7 @@ FUTURE PHASES:
 
 ---
 
-## 🏗️ Current Project Structure
+## Current Project Structure
 
 ```
 TMS/
